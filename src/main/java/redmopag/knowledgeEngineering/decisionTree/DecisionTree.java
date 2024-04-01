@@ -2,9 +2,11 @@ package redmopag.knowledgeEngineering.decisionTree;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 public class DecisionTree {
-    private Node root;
+    private final Node root;
     private Node current;
 
     public DecisionTree(String text){
@@ -22,18 +24,45 @@ public class DecisionTree {
         }
     }
     public void toRoot(){
-        root = current;
+        current = root;
     }
+    public boolean isLeaf(){
+        return current.isLeaf();
+    }
+    public String getText(){
+        return current.text;
+    }
+    public Set<String> getAnswers(){
+        return current.answers.keySet();
+    }
+    public void next(String key){
+        current = current.answers.get(key);
+    }
+
     public static class Node{
-        private String text;
+        private final String text;
         private Map<String, Node> answers;
 
         public Node(String text) {
             this.text = text;
             answers = new HashMap<>();
         }
-        public void addChild(String key, Node child){
-            answers.put(key, child);
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Node node = (Node) o;
+            return Objects.equals(text, node.text) && Objects.equals(answers, node.answers);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(text, answers);
+        }
+
+        public boolean isLeaf(){
+            return answers.isEmpty();
         }
     }
 }

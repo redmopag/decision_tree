@@ -17,21 +17,21 @@ public class DecisionTreeFactory {
             while (scanner.hasNextLine()){
                 String parentKey = getText(strings[1]);
                 str = scanner.nextLine();
-                if(str.equals("И")) {
+                if(str.equals("\tИ")) {
                     strings = scanner.nextLine().split("=");
                     decisionTree.addNode(getText(strings[0]), parentKey);
                 } else if(str.contains("ТО")){
-                    strings = scanner.nextLine().split(" ");
-                    decisionTree.addNode(getText(strings[1].replace(";", "")), parentKey);
+                    decisionTree.addNode(str.replace("ТО", "").replace(";", "").trim(), parentKey);
                 } else if(str.contains("ЕСЛИ"))
                     decisionTree.toRoot();
             }
         }
+        decisionTree.toRoot();
         return decisionTree;
     }
     private static String getText(String str){
-        int i1 = str.indexOf("\n");
-        int i2 = str.indexOf("\n", i1);
+        int i1 = str.indexOf("\"") + 1;
+        int i2 = str.indexOf("\"", i1);
         return str.substring(i1, i2);
     }
 }
